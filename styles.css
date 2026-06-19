@@ -112,6 +112,16 @@ textarea {
   box-shadow: 0 12px 24px rgba(11, 132, 255, 0.25);
 }
 
+.brand-mark svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+}
+
 .brand-text {
   font-size: 0.98rem;
 }
@@ -308,12 +318,19 @@ p {
   mix-blend-mode: screen;
 }
 
-.device-glass img {
+.device-glass img,
+.interface-preview {
   position: relative;
   z-index: 1;
   width: 100%;
   border-radius: var(--radius);
   box-shadow: 0 16px 44px rgba(24, 31, 43, 0.14);
+}
+
+.interface-preview {
+  display: block;
+  height: auto;
+  background: #f8fafe;
 }
 
 .attention-strip {
