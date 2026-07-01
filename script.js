@@ -35,6 +35,65 @@ if (techTrack) {
   window.addEventListener("resize", updateLoopDistance);
 }
 
+const velocityLines = document.querySelectorAll("[data-scroll-velocity]");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (velocityLines.length > 0 && !reduceMotion) {
+  let lastScrollY = window.scrollY;
+  let lastScrollTime = performance.now();
+  let scrollSpeed = 0;
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      const now = performance.now();
+      const deltaY = window.scrollY - lastScrollY;
+      const deltaTime = Math.max(16, now - lastScrollTime);
+
+      scrollSpeed = Math.abs((deltaY / deltaTime) * 1000);
+      lastScrollY = window.scrollY;
+      lastScrollTime = now;
+    },
+    { passive: true }
+  );
+
+  velocityLines.forEach((line) => {
+    const scroller = line.querySelector(".velocity-scroller");
+    const firstCopy = scroller?.querySelector("span");
+    const baseVelocity = Number(line.dataset.scrollVelocity) || 60;
+
+    if (!scroller || !firstCopy) return;
+
+    for (let index = 0; index < 7; index += 1) {
+      scroller.appendChild(firstCopy.cloneNode(true));
+    }
+
+    let offset = 0;
+    let lastFrameTime = performance.now();
+    let boost = 0;
+
+    const animate = (time) => {
+      const delta = Math.min(0.05, Math.max(0, (time - lastFrameTime) / 1000));
+      const copyWidth = firstCopy.getBoundingClientRect().width;
+      const targetBoost = Math.min(scrollSpeed / 900, 3.5);
+
+      boost += (targetBoost - boost) * 0.08;
+
+      if (copyWidth > 0) {
+        offset += baseVelocity * delta * (1 + boost);
+        offset = ((offset % copyWidth) + copyWidth) % copyWidth;
+        scroller.style.transform = `translate3d(${-offset}px, 0, 0)`;
+      }
+
+      scrollSpeed *= 0.92;
+      lastFrameTime = time;
+      requestAnimationFrame(animate);
+    };
+
+    requestAnimationFrame(animate);
+  });
+}
+
 const copyButton = document.querySelector("[data-copy]");
 const copyStatus = document.querySelector(".copy-status");
 

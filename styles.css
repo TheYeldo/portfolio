@@ -333,6 +333,66 @@ p {
   background: #f8fafe;
 }
 
+.velocity-marquee {
+  display: grid;
+  gap: 8px;
+  margin: -6px 0 30px;
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.velocity-line {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(46px, 7vw, 86px);
+}
+
+.velocity-line::before,
+.velocity-line::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: clamp(34px, 9vw, 120px);
+  pointer-events: none;
+  content: "";
+}
+
+.velocity-line::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(246, 247, 251, 0.96), rgba(246, 247, 251, 0));
+}
+
+.velocity-line::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(246, 247, 251, 0.96), rgba(246, 247, 251, 0));
+}
+
+.velocity-scroller {
+  display: flex;
+  width: max-content;
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.velocity-scroller span {
+  flex: 0 0 auto;
+  padding-right: 28px;
+  color: #111827;
+  font-size: clamp(2.1rem, 5.7vw, 5rem);
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.velocity-line--reverse .velocity-scroller span {
+  color: transparent;
+  -webkit-text-stroke: 1.4px rgba(11, 132, 255, 0.72);
+  text-stroke: 1.4px rgba(11, 132, 255, 0.72);
+}
+
 .attention-strip {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
