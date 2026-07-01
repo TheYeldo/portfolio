@@ -14,6 +14,27 @@ const revealObserver = new IntersectionObserver(
 
 revealItems.forEach((item) => revealObserver.observe(item));
 
+const techTrack = document.querySelector(".tech-loop__track");
+
+if (techTrack) {
+  const originalLogos = Array.from(techTrack.children);
+
+  originalLogos.forEach((logo) => {
+    const clone = logo.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    clone.setAttribute("tabindex", "-1");
+    techTrack.appendChild(clone);
+  });
+
+  const updateLoopDistance = () => {
+    techTrack.style.setProperty("--tech-loop-distance", `${techTrack.scrollWidth / 2}px`);
+  };
+
+  updateLoopDistance();
+  window.addEventListener("load", updateLoopDistance);
+  window.addEventListener("resize", updateLoopDistance);
+}
+
 const copyButton = document.querySelector("[data-copy]");
 const copyStatus = document.querySelector(".copy-status");
 
