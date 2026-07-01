@@ -14,6 +14,38 @@ const revealObserver = new IntersectionObserver(
 
 revealItems.forEach((item) => revealObserver.observe(item));
 
+const navPills = document.querySelectorAll(".site-nav .pill[data-section]");
+
+if (navPills.length > 0) {
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      const visibleEntry = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+      if (!visibleEntry) return;
+
+      navPills.forEach((pill) => {
+        pill.classList.toggle("is-active", pill.dataset.section === visibleEntry.target.id);
+      });
+    },
+    {
+      rootMargin: "-36% 0px -48% 0px",
+      threshold: [0.12, 0.24, 0.42, 0.6],
+    }
+  );
+
+  navPills.forEach((pill) => {
+    const section = document.getElementById(pill.dataset.section);
+    if (section) sectionObserver.observe(section);
+
+    pill.addEventListener("click", () => {
+      navPills.forEach((item) => item.classList.remove("is-active"));
+      pill.classList.add("is-active");
+    });
+  });
+}
+
 const techTrack = document.querySelector(".tech-loop__track");
 
 if (techTrack) {
